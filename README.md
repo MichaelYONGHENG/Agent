@@ -66,7 +66,3 @@ This project explores the implementation of various agents leveraging models suc
 ## 📜 License
 
 This project is licensed under the MIT License. See `LICENSE` for details.
-
----
-
-By following this format, the README will appear professional, be user-friendly, and clearly communicate the project's goals and features.
