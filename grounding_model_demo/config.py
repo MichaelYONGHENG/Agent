@@ -2,7 +2,7 @@ import yaml
 from pathlib import Path
 
 class Config:
-    def __init__(self, config_path="web_demo\grounding_model_demo\config.yaml"):
+    def __init__(self, config_path="grounding_model_demo/config.yaml"):
         self.config_path = Path(config_path)
         self.load_config()
     

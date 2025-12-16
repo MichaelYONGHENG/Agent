@@ -41,6 +41,34 @@ def grounding(text, image):
                 ]
             }
         ],
-        max_tokens=300
+        max_tokens=3000
     )
-    return response.choices[0].message.content
+    import json
+    import re
+
+    content = response.choices[0].message.content
+
+    # 检查是否包含```json块
+    json_match = re.search(r"```json\s*\n(.*?)\n```", content, re.DOTALL)
+    if json_match:
+        try:
+            json_str = json_match.group(1)
+            data = json.loads(json_str)
+            if "bbox_2d" in data:
+                return data["bbox_2d"]
+            else:
+                return data  # 没有bbox_2d就返回整个对象
+        except Exception as e:
+            # 如果解析失败，返回原内容
+            return content
+    else:
+        # 不是json格式，直接返回原内容
+        try:
+            data = json.loads(content)
+            if "bbox_2d" in data:
+                return data["bbox_2d"]
+            else:
+                return data  # 没有bbox_2d就返回整个对象
+        except Exception as e:
+            # 如果解析失败，返回原内容
+            return content
