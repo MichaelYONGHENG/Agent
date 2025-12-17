@@ -87,11 +87,15 @@ class AgentUI:
         """获取配置信息"""
         config = get_config()
         return f"""
-配置信息:
-- Base URL: {config.base_url}
-- Vision Model: {config.vision_model}
-- Reasoning Model: {config.reasoning_model}
-- Max Steps: {config.max_steps}
+📷 感知模块（阿里云 Qwen）:
+  - Vision Model: {config.vision_model}
+  - Grounding Model: {config.grounding_model}
+
+🧠 推理模块（Claude）:
+  - Reasoning Model: {config.reasoning_model}
+
+⚙️ Agent配置:
+  - Max Steps: {config.max_steps}
 """
 
 

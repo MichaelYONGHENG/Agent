@@ -1,6 +1,7 @@
 """
 规划器模块
 基于ReAct（Reasoning + Acting）范式的任务规划
+使用 Claude 模型进行推理
 """
 import json
 import re
@@ -19,6 +20,7 @@ class ReActPlanner:
     """
     ReAct规划器
     实现 Thought -> Action -> Observation 循环
+    使用 Claude 模型进行推理规划
     """
     
     SYSTEM_PROMPT = """你是一个专业的GUI自动化Agent规划器。
@@ -66,12 +68,22 @@ class ReActPlanner:
 """
 
     def __init__(self, config=None):
+        """
+        初始化规划器
+        
+        Args:
+            config: 配置对象，None则使用默认配置
+        """
         self.config = config or get_config()
+        
+        # 使用Claude配置创建规划客户端
         self.planner_client = VisionChatClient(
-            api_key=self.config.api_key,
-            base_url=self.config.base_url,
+            api_key=self.config.reasoning_api_key,
+            base_url=self.config.reasoning_base_url,
             system_prompt=self.SYSTEM_PROMPT
         )
+        
+        logger.info(f"规划器初始化完成，使用模型: {self.config.reasoning_model}")
     
     def plan_next_action(
         self,
@@ -303,4 +315,3 @@ class ReActPlanner:
     def reset(self):
         """重置规划器状态"""
         self.planner_client.clear_history(keep_system=True)
-

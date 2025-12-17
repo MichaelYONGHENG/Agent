@@ -1,6 +1,7 @@
 """
 视觉感知模块
 基于多模态LLM的界面理解和元素定位
+使用阿里云 Qwen3-VL-Plus 模型
 """
 import json
 import re
@@ -18,6 +19,7 @@ class VisionPerception:
     """
     视觉感知类
     负责理解当前界面状态和定位UI元素
+    使用阿里云 Qwen3-VL-Plus 模型进行视觉理解
     """
     
     # 感知系统提示词
@@ -44,15 +46,25 @@ class VisionPerception:
 请只返回JSON格式的结果。"""
     
     def __init__(self, config=None):
+        """
+        初始化视觉感知模块
+        
+        Args:
+            config: 配置对象，None则使用默认配置
+        """
         self.config = config or get_config()
+        
+        # 使用阿里云配置创建视觉客户端
         self.vision_client = VisionChatClient(
-            api_key=self.config.api_key,
-            base_url=self.config.base_url
+            api_key=self.config.perception_api_key,
+            base_url=self.config.perception_base_url
         )
         self.grounding_client = VisionChatClient(
-            api_key=self.config.api_key,
-            base_url=self.config.base_url
+            api_key=self.config.perception_api_key,
+            base_url=self.config.perception_base_url
         )
+        
+        logger.info(f"视觉感知模块初始化完成，使用模型: {self.config.vision_model}")
     
     def perceive(self, screenshot: np.ndarray, task_description: str) -> Dict[str, Any]:
         """
@@ -256,4 +268,3 @@ class VisionPerception:
         
         logger.warning(f"无法解析JSON响应: {response[:200]}...")
         return {"raw_response": response}
-
